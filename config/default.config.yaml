@@ -30,6 +30,14 @@ scan:
 # Optional. If need to use a proxy to access baseUrl
 # proxy: "http://10.228.1.1:80"
 
+requestHeader:
+    # Optional. If need to set a request header "User-Agent"
+    # 'origin' to set the user agent of requester
+    # or own string eg. 'matrix-content-scanner'
+    # userAgent: 'matrix-content-scanner'
+    # Optional. 'origin or 'x-forwarded-for'
+    # xForward: 
+
 middleware:
     # Configuration for using encrypted_body in POST requests.
     encryptedBody:

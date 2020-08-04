@@ -16,46 +16,54 @@ limitations under the License.
 
 **/
 
-const yaml = require('js-yaml');
-const fs = require('fs');
-const Joi = require('joi');
+const yaml = require("js-yaml");
+const fs = require("fs");
+const Joi = require("joi");
 
 const configSchema = Joi.object().keys({
-    server: Joi.object().keys({
-        port: Joi.number().required(),
-        host: Joi.string().required(),
-    }).required(),
-    scan: Joi.object().keys({
-        script: Joi.string().required(),
-        tempDirectory: Joi.string().required(),
-        baseUrl: Joi.string().required(),
-        directDownload: Joi.boolean(),
-    }).required(),
-    altRemovalCmd: Joi.string(),
-    proxy: Joi.string(),
-    middleware: Joi.object().keys({
-        encryptedBody: Joi.object().keys({
-            pickleKey: Joi.string().required(),
-            picklePath: Joi.string().required(),
-        }),
-    }),
-	acceptedMimeType: Joi.array(),
+  server: Joi.object()
+    .keys({
+      port: Joi.number().required(),
+      host: Joi.string().required()
+    })
+    .required(),
+  scan: Joi.object()
+    .keys({
+      script: Joi.string().required(),
+      tempDirectory: Joi.string().required(),
+      baseUrl: Joi.string().required(),
+      directDownload: Joi.boolean()
+    })
+    .required(),
+  altRemovalCmd: Joi.string(),
+  proxy: Joi.string(),
+  requestHeader: Joi.object().keys({
+    userAgent: Joi.string(),
+    xForward: Joi.string()
+  }),
+  middleware: Joi.object().keys({
+    encryptedBody: Joi.object().keys({
+      pickleKey: Joi.string().required(),
+      picklePath: Joi.string().required()
+    })
+  }),
+  acceptedMimeType: Joi.array()
 });
 
 // Exported alongside mechanism to load particular configuarion
 let config;
 
 function loadConfig(filePath) {
-    config = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'));
+  config = yaml.safeLoad(fs.readFileSync(filePath, "utf8"));
 
-    const result = Joi.validate(config, configSchema);
-    if (result.error) {
-        throw result.error;
-    }
+  const result = Joi.validate(config, configSchema);
+  if (result.error) {
+    throw result.error;
+  }
 }
 
 module.exports = {
-    loadConfig,
-    setConfig: (c) => config = c,
-    getConfig: () => config,
-}
+  loadConfig,
+  setConfig: c => (config = c),
+  getConfig: () => config
+};
