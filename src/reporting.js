@@ -65,25 +65,22 @@ function generateHttpUrl(
   return `${baseUrl}/_matrix/media/v1/${mediaType}/${domain}/${mediaId}`;
 }
 
-function generateRequestHeaders(opts, req) {
-  console.info("Test7", req.headers);
+function generateRequestHeaders(config, req) {
   const requestHeaders = {};
-  if (opts) {
-    const { userAgent, xForward } = opts;
+  const { userAgent, xForward } = config;
+  if (userAgent != null) {
     if (userAgent === "origin") {
-      if (req.header("user-agent")) {
-        requestHeaders["user-agent"] = req.header("user-agent");
-      }
-    } else if (userAgent != null) {
+      requestHeaders["user-agent"] = req.header("user-agent");
+    } else {
       requestHeaders["user-agent"] = userAgent;
     }
+  }
 
+  if (xForward != null) {
     if (xForward === "origin") {
       requestHeaders["x-forwarded-for"] = req.ip;
-    } else if (xForward != null) {
-      if (req.header(xForward)) {
-        requestHeaders["x-forwarded-for"] = req.header(xForward);
-      }
+    } else if (req.header(xForward)) {
+      requestHeaders["x-forwarded-for"] = req.header(xForward);
     }
   }
 
@@ -283,22 +280,21 @@ async function _generateReportFromDownload(
   try {
     downloadHeaders = await new Promise((resolve, reject) => {
       const config = getConfig();
-      console.info("Test8", req.headers);
-      //console.info("Test10", req);
-      const reqHeaders = generateRequestHeaders(config.requestHeader, req);
+
       let responseHeaders;
       let connect = {
         url: httpUrl,
         encoding: null,
-        qs: thumbnailQueryParams,
-        headers: reqHeaders
+        qs: thumbnailQueryParams
       };
       const proxy = config.proxy;
       if (proxy != null) {
         connect.proxy = proxy;
       }
-      console.info("Test3", req.headers);
-      console.info("Connect", connect);
+      if (config.requestHeader != null) {
+        connect.headers = generateRequestHeaders(config.requestHeader, req);
+        console.info(`Request headers are`, connect.headers);
+      }
 
       request
         .get(connect)
