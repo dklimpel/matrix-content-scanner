@@ -128,6 +128,7 @@ async function downloadHandler(
   thumbnailQueryParams
 ) {
   const config = getConfig();
+  console.info("Test6", req.headers);
 
   const { domain, mediaId } = req.params;
 
@@ -158,6 +159,7 @@ async function downloadHandler(
     proxyDownload,
     getUnlinkFn(req.console)
   );
+  console.info("Test5", req.headers);
   await proxyDownloadWithTmpDir(
     req,
     res,
@@ -185,12 +187,12 @@ async function proxyDownload(
     baseUrl,
 
     thumbnailQueryParams,
-    directDownload,
-    req
+    directDownload
   };
 
+  console.info("Test4", req.headers);
   const { clean, info, filePath, headers } = await generateReportFromDownload(
-    req.console,
+    req,
     domain,
     mediaId,
     matrixFile,
@@ -237,6 +239,8 @@ async function scanReportHandler(req, res, next, matrixFile) {
     config.scan
   );
 
+  // request vorhanden
+  console.info("Test2", req.headers);
   if (!result.scanned) {
     const generateReportFromDownloadWithTmpDir = withTempDir(
       config.scan.tempDirectory,
@@ -244,7 +248,7 @@ async function scanReportHandler(req, res, next, matrixFile) {
       getUnlinkFn(req.console)
     );
     result = await generateReportFromDownloadWithTmpDir(
-      req.console,
+      req,
       domain,
       mediaId,
       matrixFile,

@@ -66,6 +66,7 @@ function generateHttpUrl(
 }
 
 function generateRequestHeaders(opts, req) {
+  console.info("Test7", req.headers);
   const requestHeaders = {};
   if (opts) {
     const { userAgent, xForward } = opts;
@@ -231,19 +232,19 @@ const generateReportFromDownload = deduplicatePromises(
  * ```
  **/
 async function _generateReportFromDownload(
-  console,
+  req,
   domain,
   mediaId,
   matrixFile,
   opts
 ) {
+  const console = req.console;
   const {
     baseUrl,
     tempDirectory,
     script,
     thumbnailQueryParams,
-    directDownload,
-    req
+    directDownload
   } = opts;
   if (
     baseUrl === undefined ||
@@ -282,6 +283,8 @@ async function _generateReportFromDownload(
   try {
     downloadHeaders = await new Promise((resolve, reject) => {
       const config = getConfig();
+      console.info("Test8", req.headers);
+      //console.info("Test10", req);
       const reqHeaders = generateRequestHeaders(config.requestHeader, req);
       let responseHeaders;
       let connect = {
@@ -294,7 +297,8 @@ async function _generateReportFromDownload(
       if (proxy != null) {
         connect.proxy = proxy;
       }
-      console.info(connect);
+      console.info("Test3", req.headers);
+      console.info("Connect", connect);
 
       request
         .get(connect)
