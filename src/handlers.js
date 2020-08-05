@@ -185,7 +185,7 @@ async function scanReportHandler(req, res, next, matrixFile) {
             getUnlinkFn(req.console),
         );
         result = await generateReportFromDownloadWithTmpDir(
-            req.console, domain, mediaId, matrixFile, config.scan
+            req, domain, mediaId, matrixFile, config.scan
         );
     }
 
