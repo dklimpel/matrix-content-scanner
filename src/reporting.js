@@ -226,10 +226,10 @@ async function _generateReportFromDownload(req, domain, mediaId, matrixFile, opt
 	    if (proxy != null) {
 		connect.proxy = proxy;
 	    }
-            if (config.requestHeader != null) {
+	    if (config.requestHeader != null) {
 		connect.headers = generateRequestHeaders(config.requestHeader, req);
 		console.info(`Request headers are`, connect.headers);
-            }
+	    }
 
             request
                 .get(connect)
