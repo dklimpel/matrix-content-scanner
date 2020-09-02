@@ -134,5 +134,25 @@ describe('reporting.js', () => {
 
             assert.strictEqual(report.clean, false);
         });
+
+        it('should indicate that file is ToDo - Beschreibung', async () => {
+            const report = await generateRequestHeaders(generateConfig);
+
+            assert.strictEqual(report.clean, None);
+        });
+
+        it('should indicate that file is ToDo - Beschreibung', async () => {
+            const modifiedConfig = {
+                baseUrl: "https://matrix.org",
+                tempDirectory: "/tmp",
+
+                // Script that does not exist on disk
+                script: "some_script_that_should_not_exist_on_disk.sh",
+            };
+
+            const report = await generateDecryptedReportFromFile(modifiedConfig);
+
+            assert.strictEqual(report.clean, false);
+        });
     });
 });
