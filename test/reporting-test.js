@@ -142,7 +142,7 @@ describe('reporting.js', () => {
 
             const app = express();
             const req = request(app).get('/user').set('Accept', 'application/json')
-            const report = await generateRequestHeaders(generateConfig, req);
+            const report = generateRequestHeaders(generateConfig, req);
 
             assert.strictEqual(report, None);
         });
