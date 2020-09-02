@@ -21,6 +21,7 @@ const {
     generateReport,
     generateHttpUrl,
     clearReportCache,
+    generateRequestHeaders,
 } = require('../src/reporting.js');
 
 const assert = require('assert');
@@ -136,9 +137,14 @@ describe('reporting.js', () => {
         });
 
         it('should indicate that file is ToDo - Beschreibung', async () => {
-            const report = await generateRequestHeaders(generateConfig);
+            const request = require('supertest');
+            const express = require('express');
 
-            assert.strictEqual(report.clean, None);
+            const app = express();
+            const req = request(app).get('/user').set('Accept', 'application/json')
+            const report = await generateRequestHeaders(generateConfig, req);
+
+            assert.strictEqual(report, None);
         });
 
         it('should indicate that file is ToDo - Beschreibung', async () => {
